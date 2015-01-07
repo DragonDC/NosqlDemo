@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.example.nosqldemo.domain.Car;
-import com.example.nosqldemo.domain.Person;
 import com.example.nosqldemo.service.PlanetaManager;
 import com.example.nosqldemo.service.UkladPlanetarnyManager;
 import com.example.nosqldemo.domain.Planeta;
@@ -40,6 +38,9 @@ public class UkladPlanetarnyManagerTest {
 	
 	private int SrednicaUnique = 565656;
 	
+	private final int SrednicaUnique2 = 6666;
+	private final int kryterium = 6666;
+	
 	//Uklad
 	private final String nazwaU1 = "Uklad Sloneczny";
 	private final String nazwaU2 = "Uklad Kepler";
@@ -49,7 +50,8 @@ public class UkladPlanetarnyManagerTest {
 	private final int liczbaObiektowUnique = 10;
 	
 	private final String nazwaUkladuUnique = "Uklad Unikalny";
-	private final int liczbaObiektowUnique2 = 666;
+	//private final int liczbaObiektowUnique2 = 666;
+	
 	
 	@Test
 	public void checkAdding(){
@@ -475,5 +477,49 @@ public class UkladPlanetarnyManagerTest {
 		
 		managerUkladu.deleteAllUkladyPlanetarne();
 	}
+	
+	@Test
+	public void deletePlanetyInUkladBySrednicaCheck() {
+		Planeta planeta1 = new Planeta();
+		planeta1.setNazwa(nazwa1);
+		planeta1.setSrednica(srednica1);
+		planeta1.setIl_ks(il_ks1);
+		
+		Planeta planeta2 = new Planeta();
+		planeta2.setNazwa(nazwa2);
+		planeta2.setSrednica(SrednicaUnique2);
+		planeta2.setIl_ks(il_ks2);
+		
+		Planeta planeta3 = new Planeta();
+		planeta3.setNazwa(nazwa1);
+		planeta3.setSrednica(SrednicaUnique2);
+		planeta3.setIl_ks(il_ks2);
+				
+		managerPlanety.addPlaneta(planeta1);
+		managerPlanety.addPlaneta(planeta2);
+		managerPlanety.addPlaneta(planeta3);
+		
+		List<Planeta> planetyTab1 = new ArrayList<Planeta>();
+		planetyTab1.add(planeta1);
+		planetyTab1.add(planeta2);
+		planetyTab1.add(planeta3);
+		
+		UkladPlanetarny uklad1 = new UkladPlanetarny();
+		uklad1.setNazwaUkladu(nazwaU1);
+		uklad1.setLiczbaObiektow(liczbaObiektow1);
+		uklad1.setPlanety(planetyTab1);
+		managerUkladu.addNewUkladPlanetarny(uklad1);
+		
+		List<Planeta> listaPlanetUkladu = managerUkladu.getPlanetyInUklad(uklad1);
+		assertNotNull(listaPlanetUkladu);
+		
+		managerUkladu.deletePlanetyInUkladBySrednica(uklad1, kryterium);
+		
+		assertNotNull(managerPlanety.getPlanetaById(planeta1.getId()));
+		assertEquals(null, managerPlanety.getPlanetaById(planeta2.getId()));
+		assertEquals(null, managerPlanety.getPlanetaById(planeta3.getId()));
+		
+	}
+	
 	
 }

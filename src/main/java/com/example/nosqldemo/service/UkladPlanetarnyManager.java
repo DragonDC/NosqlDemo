@@ -61,5 +61,14 @@ public class UkladPlanetarnyManager {
 		return planety;
 	}
 	
+	public void deletePlanetyInUkladBySrednica(UkladPlanetarny uklad, int kryterium){
+	
+		for (Planeta planeta : uklad.getPlanety()) {
+			if(planeta.getSrednica() == kryterium){
+				planetaRepository.delete(planeta);
+			}
+		}
+	}
+	
 	
 }

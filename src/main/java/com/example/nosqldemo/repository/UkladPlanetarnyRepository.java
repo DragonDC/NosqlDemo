@@ -11,7 +11,7 @@ import com.example.nosqldemo.domain.UkladPlanetarny;
 
 public interface UkladPlanetarnyRepository extends CrudRepository<UkladPlanetarny, ObjectId> {
 	
-	<S extends UkladPlanetarny> S save(S entity);
+	/*<S extends UkladPlanetarny> S save(S entity);*/
 	
 	UkladPlanetarny findById(ObjectId id);
 	
